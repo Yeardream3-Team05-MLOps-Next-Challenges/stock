@@ -29,7 +29,7 @@ def get_config():
         "appkey": APP_KEY,
         "appsecret": APP_SECRET,
         "htsid": HTS_ID,
-        "kafka_topic": "stock_data",  # Kafka 토픽 이름
+        "kafka_topic": "stock_data_actions",  # Kafka 토픽 이름
     }
 
 

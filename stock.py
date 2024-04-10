@@ -33,12 +33,15 @@ def get_config():
     }
 
 
-
-def get_approval(key, secret):
+def get_approval():
     """웹소켓 접속키 발급"""
-    url = 'https://openapivts.koreainvestment.com:29443'  # 모의투자계좌
+    url = 'https://openapivts.koreainvestment.com:29443'  # 모의투자계좌 URL
     headers = {"content-type": "application/json"}
-    body = {"grant_type": "client_credentials", "appkey": APP_KEY, "secretkey": APP_SECRET}
+    body = {
+        "grant_type": "client_credentials",
+        "appkey": APP_KEY,        
+        "secretkey": APP_SECRET   
+    }
     PATH = "oauth2/Approval"
     URL = f"{url}/{PATH}"
     res = requests.post(URL, headers=headers, data=json.dumps(body))

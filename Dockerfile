@@ -17,4 +17,4 @@ ENV HTS_ID=INFO
 ENV SERVER_HOST=host
 
 # 애플리케이션 실행
-CMD ["python", "./test_kafka.py"]
+CMD ["python", "./stock.py"]

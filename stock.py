@@ -38,7 +38,7 @@ def get_approval(key, secret):
     """웹소켓 접속키 발급"""
     url = 'https://openapivts.koreainvestment.com:29443'  # 모의투자계좌
     headers = {"content-type": "application/json"}
-    body = {"grant_type": "client_credentials", "appkey": key, "secretkey": secret}
+    body = {"grant_type": "client_credentials", "appkey": APP_KEY, "secretkey": APP_SECRET}
     PATH = "oauth2/Approval"
     URL = f"{url}/{PATH}"
     res = requests.post(URL, headers=headers, data=json.dumps(body))
@@ -63,7 +63,7 @@ async def stockhoka(data):
 
 async def connect():
     config = get_config()
-    g_approval_key = get_approval(config["appkey"], config["appsecret"])
+    g_approval_key = get_approval()
     print(f"approval_key: {g_approval_key}")
     
     url = 'ws://ops.koreainvestment.com:31000'  # 모의투자계좌

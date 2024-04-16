@@ -11,10 +11,8 @@ import os
 import asyncio
 from kafka import KafkaProducer
 import logging
-from dotenv import load_dotenv
 
-# .env 파일 로드
-load_dotenv()
+
 
 # 환경 변수
 APP_KEY = os.getenv('APP_KEY', 'default_url')

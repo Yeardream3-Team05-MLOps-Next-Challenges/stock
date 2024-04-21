@@ -11,6 +11,7 @@ import os
 import asyncio
 from kafka import KafkaProducer
 import logging
+import datetime
 
 
 
@@ -55,6 +56,8 @@ def get_approval(key, secret):
 
 async def send_to_kafka(data):
     logging.info('kafka로 전송 시작')
+    current_date = datetime.datetime.now().strftime("%Y%m%d")  # 현재 날짜를 YYYYMMDD 형식으로 가져옴
+    data['날짜'] = current_date  # 데이터 사전에 날짜 키를 추가
     producer.send(get_config()["kafka_topic"], value=data)
     logging.info('kafka로 데이터 전송 완료')
 

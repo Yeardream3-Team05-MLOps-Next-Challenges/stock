@@ -2,7 +2,7 @@ import os
 from prefect.deployments import Deployment
 from stock import fetch_and_send_stock_data
 
-PREFECT_API_URL = os.environ.get('PREFECT_API_URL')
+PREFECT_API_URL = os.getenv('PREFECT_API_URL')
 
 if not PREFECT_API_URL:
     raise ValueError("PREFECT_API_URL 환경 변수가 설정되지 않았습니다.")

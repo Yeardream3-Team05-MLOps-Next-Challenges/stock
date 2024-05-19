@@ -110,9 +110,9 @@ async def connect():
 def run_connect():
     asyncio.run(connect())
 
-
-with Flow("fetch_and_send_stock_data") as flow:
+@flow(name="fetch_and_send_stock_data")  # 수정된 부분
+def fetch_and_send_stock_data():
     run_connect()
 
 if __name__ == "__main__":
-    flow.run()
+    fetch_and_send_stock_data()

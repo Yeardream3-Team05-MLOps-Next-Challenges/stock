@@ -98,6 +98,9 @@ jobs:
     - name: Export PREFECT_API_URL 
       run: echo "PREFECT_API_URL=${{ secrets.PREFECT_SERVER_URL }}" >> $GITHUB_ENV
 
+    - name: Verify PREFECT_API_URL
+      run: echo "PREFECT_API_URL is set"
+
     - name: Run Prefect Flow Registration Script
       env:
         PREFECT_API_URL: ${{ secrets.PREFECT_SERVER_URL }}

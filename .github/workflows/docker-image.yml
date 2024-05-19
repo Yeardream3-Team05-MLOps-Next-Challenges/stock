@@ -78,7 +78,6 @@ jobs:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       if: always()
 
-  # Prefect 작업
   prefect:
     needs: deploy
     runs-on: ubuntu-latest
@@ -89,12 +88,12 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.8'  
+        python-version: '3.8'
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt  
+        pip install -r requirements.txt
 
     - name: Register Prefect Flow
       env:
@@ -102,15 +101,7 @@ jobs:
       run: |
         # Prefect Server backend로 설정
         prefect backend server
-        python -c "
-import os
-from prefect import Client
-client = Client(api_server=os.environ['PREFECT_API_URL'])
-client.create_project(project_name='StockDataProject', create_if_not_exists=True)
-from stock_flow import flow
-flow.register(project_name='StockDataProject')
-        "
-
+        python -c "import os\nfrom prefect import Client\nclient = Client(api_server=os.environ['PREFECT_API_URL'])\nclient.create_project(project_name='StockDataProject', create_if_not_exists=True)\nfrom stock_flow import flow\nflow.register(project_name='StockDataProject')"
 
     - name: action-slack
       uses: 8398a7/action-slack@v3
@@ -123,4 +114,3 @@ flow.register(project_name='StockDataProject')
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       if: always()
-%

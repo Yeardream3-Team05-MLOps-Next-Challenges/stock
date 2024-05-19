@@ -97,12 +97,10 @@ jobs:
         pip install -r requirements.txt
 
     - name: Export PREFECT_API_URL
-      env:
-        PREFECT_API_URL: ${{ secrets.PREFECT_SERVER_URL }}
-      run: echo "PREFECT_API_URL=${{ secrets.PREFECT_SERVER_URL }}"
+      run: echo "PREFECT_API_URL=${{ secrets.PREFECT_SERVER_URL }}" > .env
 
     - name: Verify PREFECT_API_URL
-      run: echo "PREFECT_API_URL=$PREFECT_API_URL"
+      run: cat .env
 
     - name: Run Prefect Flow Registration Script
       env:

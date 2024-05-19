@@ -1,13 +1,12 @@
-name: Docker Image CICDC
+name: Docker Image CICD
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
 
@@ -27,14 +26,13 @@ jobs:
       uses: 8398a7/action-slack@v3
       with:
         status: ${{ job.status }}
-        author_name: Gibhub Actions - build
-        fields: repo,commit,message,author # action,eventName,ref,workflow,job,took 추가할 수 있음
+        author_name: GitHub Actions - build
+        fields: repo,commit,message,author
         mention: here
         if_mention: failure,cancelled
       env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
-      if: always() # Pick up events even if the job fails or is canceled.
-
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      if: always()
 
   deploy:
     needs: build
@@ -67,15 +65,62 @@ jobs:
           docker compose down --rmi all
           docker compose build
           docker compose up -d
-          
+
     - name: action-slack
       uses: 8398a7/action-slack@v3
       with:
         status: ${{ job.status }}
-        author_name: Gibhub Actions - deploy
-        fields: repo,commit,message,author # action,eventName,ref,workflow,job,took 추가할 수 있음
+        author_name: GitHub Actions - deploy
+        fields: repo,commit,message,author
         mention: here
         if_mention: failure,cancelled
       env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
-      if: always() # Pick up events even if the job fails or is canceled.
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      if: always()
+
+  # Prefect 작업
+  prefect:
+    needs: deploy
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'  
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt  
+
+    - name: Register Prefect Flow
+      env:
+        PREFECT_API_URL: ${{ secrets.PREFECT_SERVER_URL }}  # Prefect Server URL 사용
+      run: |
+        # Prefect Server backend로 설정
+        prefect backend server
+        python -c "
+import os
+from prefect import Client
+client = Client(api_server=os.environ['PREFECT_API_URL'])
+client.create_project(project_name='StockDataProject', create_if_not_exists=True)
+from stock_flow import flow
+flow.register(project_name='StockDataProject')
+        "
+
+
+    - name: action-slack
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        author_name: GitHub Actions - prefect
+        fields: repo,commit,message,author
+        mention: here
+        if_mention: failure,cancelled
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      if: always()
+%

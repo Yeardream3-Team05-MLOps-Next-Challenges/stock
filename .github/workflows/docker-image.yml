@@ -103,9 +103,7 @@ jobs:
       env:
         PREFECT_API_URL: ${{ secrets.PREFECT_SERVER_URL }}  # Prefect Server URL 사용
       run: |
-        # Prefect Server backend로 설정
-        prefect backend server
-        python -c "import os\nfrom prefect import Client\nclient = Client(api_server=os.environ['PREFECT_API_URL'])\nclient.create_project(project_name='StockDataProject', create_if_not_exists=True)\nfrom stock_flow import flow\nflow.register(project_name='StockDataProject')"
+        python -c "import os\nfrom prefect.client import Client\nclient = Client(api_server=os.environ['PREFECT_API_URL'])\nclient.create_project(project_name='StockDataProject', create_if_not_exists=True)\nfrom stock_flow import flow\nflow.register(project_name='StockDataProject')"
 
     - name: action-slack
       uses: 8398a7/action-slack@v3

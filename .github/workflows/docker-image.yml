@@ -98,7 +98,7 @@ jobs:
     - name: Export PREFECT_API_URL 
       run: echo "PREFECT_API_URL=${{ secrets.PREFECT_SERVER_URL }}" >> $GITHUB_ENV
 
-    - name: Run Prefect Flow Registration Script 
+    - name: Run Prefect Flow Registration Script
       env:
         PREFECT_API_URL: ${{ secrets.PREFECT_SERVER_URL }}
       run: python register_flow.py

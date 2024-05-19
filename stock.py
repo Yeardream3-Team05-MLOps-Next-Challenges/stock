@@ -6,7 +6,7 @@ import asyncio
 from kafka import KafkaProducer
 import logging
 import datetime
-from prefect import task, Flow
+from prefect import task, flow
 
 
 

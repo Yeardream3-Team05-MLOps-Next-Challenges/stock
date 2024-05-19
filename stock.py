@@ -107,12 +107,12 @@ async def connect():
     logging.info('websocket 연결 종료')
 
 @task
-def run_connect():
-    asyncio.run(connect())
+async def run_connect():
+    await connect()
 
-@flow(name="fetch_and_send_stock_data")  # 수정된 부분
-def fetch_and_send_stock_data():
-    run_connect()
+@flow(name="fetch_and_send_stock_data")
+async def fetch_and_send_stock_data():
+    await run_connect()
 
 if __name__ == "__main__":
-    fetch_and_send_stock_data()
+    asyncio.run(fetch_and_send_stock_data())

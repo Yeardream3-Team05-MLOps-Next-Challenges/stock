@@ -24,7 +24,7 @@ logging.basicConfig(level=logging.INFO, filename='app0416.log', filemode='a', fo
 producer = KafkaProducer(acks=0,
                          compression_type='gzip',
                          bootstrap_servers=[f'{SERVER_HOST}:19094'],
-                         value_serializer=lambda x: json.dumps(x).encode('utf-8'),
+                         value_serializer=lambda x:json.dumps(x).encode('utf-8'),
                          api_version=(2,)
                          )
 
@@ -36,7 +36,7 @@ def get_config():
         "appkey": APP_KEY,
         "appsecret": APP_SECRET,
         "htsid": HTS_ID,
-        "kafka_topic": "stock_data_vscode",
+        "kafka_topic": "stock_data_action",
     }
 
 def get_approval(key, secret):

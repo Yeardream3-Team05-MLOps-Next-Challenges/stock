@@ -1,9 +1,3 @@
-# pip install websockets
-# pip install pycryptodome
-# pip install kafka-python
-# pip install requests
-
-# -*- coding: utf-8 -*-
 import websockets
 import json
 import requests
@@ -12,8 +6,12 @@ import asyncio
 from kafka import KafkaProducer
 import logging
 import datetime
+from dotenv import load_dotenv
+from prefect import task, Flow
 
 
+# .env 파일 로드
+load_dotenv()
 
 # 환경 변수
 APP_KEY = os.getenv('APP_KEY', 'default_url')
@@ -28,7 +26,7 @@ logging.basicConfig(level=logging.INFO, filename='app0416.log', filemode='a', fo
 producer = KafkaProducer(acks=0,
                          compression_type='gzip',
                          bootstrap_servers=[f'{SERVER_HOST}:19094'],
-                         value_serializer=lambda x:json.dumps(x).encode('utf-8'),
+                         value_serializer=lambda x: json.dumps(x).encode('utf-8'),
                          api_version=(2,)
                          )
 
@@ -40,7 +38,7 @@ def get_config():
         "appkey": APP_KEY,
         "appsecret": APP_SECRET,
         "htsid": HTS_ID,
-        "kafka_topic": "stock_data_action",
+        "kafka_topic": "stock_data_vscode",
     }
 
 def get_approval(key, secret):
@@ -59,6 +57,7 @@ async def send_to_kafka(data):
     current_date = datetime.datetime.now().strftime("%Y%m%d")  # 현재 날짜를 YYYYMMDD 형식으로 가져옴
     data['날짜'] = current_date  # 데이터 사전에 날짜 키를 추가
     producer.send(get_config()["kafka_topic"], value=data)
+
     logging.info('kafka로 데이터 전송 완료')
 
 async def stockhoka(data):
@@ -109,8 +108,13 @@ async def connect():
                 continue
     logging.info('websocket 연결 종료')
 
-async def main():
-    await asyncio.gather(connect())
+@task
+def run_connect():
+    asyncio.run(connect())
+
+
+with Flow("fetch_and_send_stock_data") as flow:
+    run_connect()
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    flow.run()

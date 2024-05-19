@@ -99,13 +99,17 @@ jobs:
       run: echo "PREFECT_API_URL=${{ secrets.PREFECT_SERVER_URL }}" >> $GITHUB_ENV
 
     - name: Verify PREFECT_API_URL
-      run: echo "PREFECT_API_URL is set"
+      run: echo "PREFECT_API_URL=$PREFECT_API_URL"
+
 
     - name: Run Prefect Flow Registration Script
       env:
         PREFECT_API_URL: ${{ secrets.PREFECT_SERVER_URL }}
         PYTHONPATH: .
-      run: python register_flow.py 
+      run: |
+        echo "PREFECT_API_URL=$PREFECT_API_URL"
+        python register_flow.py
+
 
     - name: action-slack
       uses: 8398a7/action-slack@v3

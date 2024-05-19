@@ -6,12 +6,10 @@ import asyncio
 from kafka import KafkaProducer
 import logging
 import datetime
-from dotenv import load_dotenv
 from prefect import task, Flow
 
 
-# .env 파일 로드
-load_dotenv()
+
 
 # 환경 변수
 APP_KEY = os.getenv('APP_KEY', 'default_url')

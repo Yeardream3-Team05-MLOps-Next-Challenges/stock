@@ -61,7 +61,7 @@ jobs:
           echo "APP_KEY=${{ secrets.APP_KEY }}" > .env
           echo "APP_SECRET=${{ secrets.APP_SECRET }}" >> .env
           echo "HTS_ID=${{ secrets.HTS_ID }}" >> .env
-          echo "SERVER_HOST=${{ secrets.SERVER_HOST }}" >> ..env
+          echo "SERVER_HOST=${{ secrets.SERVER_HOST }}" >> .env
           docker compose down --rmi all
           docker compose build
           docker compose up -d
@@ -95,19 +95,21 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Export PREFECT_API_URL # 수정된 곳
+    - name: Export PREFECT_API_URL 
       run: echo "PREFECT_API_URL=${{ secrets.PREFECT_SERVER_URL }}" >> $GITHUB_ENV
 
     - name: Register Prefect Flow
       env:
         PREFECT_API_URL: ${{ secrets.PREFECT_SERVER_URL }}  # Prefect Server URL 사용
       run: |
-        python -c "import os;\
-from prefect.client import Client;\
-client = Client(api_server=os.environ['PREFECT_API_URL']);\
-client.create_project(project_name='StockDataProject', create_if_not_exists=True);\
-from stock_flow import flow;\
-flow.register(project_name='StockDataProject')"
+        python -c "
+import os
+from prefect.client import Client
+client = Client(api_server=os.environ['PREFECT_API_URL'])
+client.create_project(project_name='StockDataProject', create_if_not_exists=True)
+from stock_flow import flow
+flow.register(project_name='StockDataProject')
+        "
 
     - name: action-slack
       uses: 8398a7/action-slack@v3

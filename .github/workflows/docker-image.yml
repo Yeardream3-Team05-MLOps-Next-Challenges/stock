@@ -109,7 +109,7 @@ client = Client(api_server=os.environ['PREFECT_API_URL'])
 client.create_project(project_name='StockDataProject', create_if_not_exists=True)
 from stock_flow import flow
 flow.register(project_name='StockDataProject')
-        "
+"
 
     - name: action-slack
       uses: 8398a7/action-slack@v3

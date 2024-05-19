@@ -95,6 +95,10 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
+    - name: Export PREFECT_API_URL 
+      run: echo "PREFECT_API_URL=${{ secrets.PREFECT_SERVER_URL }}" >> $GITHUB_ENV
+
+
     - name: Register Prefect Flow
       env:
         PREFECT_API_URL: ${{ secrets.PREFECT_SERVER_URL }}  # Prefect Server URL 사용

@@ -62,6 +62,7 @@ jobs:
           echo "APP_SECRET=${{ secrets.APP_SECRET }}" >> .env
           echo "HTS_ID=${{ secrets.HTS_ID }}" >> .env
           echo "SERVER_HOST=${{ secrets.SERVER_HOST }}" >> .env
+          echo "PREFECT_API_URL=${{ secrets.PREFECT_SERVER_URL }}" >> .env
           docker compose down --rmi all
           docker compose build
           docker compose up -d

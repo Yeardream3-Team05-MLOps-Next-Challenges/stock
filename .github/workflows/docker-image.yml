@@ -101,7 +101,8 @@ jobs:
     - name: Run Prefect Flow Registration Script
       env:
         PREFECT_API_URL: ${{ secrets.PREFECT_SERVER_URL }}
-      run: python register_flow.py
+        PYTHONPATH: .
+      run: python register_flow.py 
 
     - name: action-slack
       uses: 8398a7/action-slack@v3

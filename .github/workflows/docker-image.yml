@@ -62,7 +62,7 @@ jobs:
           echo "APP_SECRET=${{ secrets.APP_SECRET }}" >> .env
           echo "HTS_ID=${{ secrets.HTS_ID }}" >> .env
           echo "SERVER_HOST=${{ secrets.SERVER_HOST }}" >> .env
-          echo "PREFECT_API_URL=${{ secrets.PREFECT_SERVER_URL }}" >> .env
+          echo "PREFECT_API_URL=${{ secrets.PREFECT_API_URL }}" >> .env
           docker compose down --rmi all
           docker compose build
           docker compose up -d
@@ -97,14 +97,14 @@ jobs:
         pip install -r requirements.txt
 
     - name: Export PREFECT_API_URL
-      run: echo "PREFECT_API_URL=${{ secrets.PREFECT_SERVER_URL }}" > .env
+      run: echo "PREFECT_API_URL=${{ secrets.PREFECT_API_URL }}" > .env
 
     - name: Verify PREFECT_API_URL
       run: cat .env
 
     - name: Run Prefect Flow Registration Script
       env:
-        PREFECT_API_URL: ${{ secrets.PREFECT_SERVER_URL }}
+        PREFECT_API_URL: ${{ secrets.PREFECT_API_URL }}
         PYTHONPATH: .
       run: python register_flow.py
 

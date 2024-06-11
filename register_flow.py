@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 from prefect.deployments import Deployment
 from prefect.infrastructure.docker import DockerContainer
-from prefect.agent.docker import DockerAgent
+from prefect.agent import Agent  # 수정된 부분
 from stock import fetch_and_send_stock_data
 
 # .env 파일 로드
@@ -37,8 +37,7 @@ deployment.apply()
 print("Deployment created and applied successfully.")
 
 # 에이전트 설정 및 실행
-agent = DockerAgent(
-    name="stock-data-agent",
+agent = Agent(
     work_queue="default",
     show_flow_logs=True
 )

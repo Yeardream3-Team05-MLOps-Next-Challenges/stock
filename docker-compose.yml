@@ -1,12 +1,17 @@
-version:  '3'
+# docker-compose.yml
+
+version: '3.10'
+
 services:
-  app:
-      build: .
-      restart: unless-stopped
-      env_file:
-        - .env
-      networks:
-        - team5
+  prefect-agent:
+    build:
+      context: .
+      platforms: linux/arm64
+    restart: unless-stopped
+    env_file:
+      - .env
+    networks:
+      - team5
 
 networks:
   team5:

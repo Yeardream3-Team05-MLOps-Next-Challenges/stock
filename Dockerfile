@@ -1,5 +1,7 @@
+# Dockerfile
+
 # 파이썬 공식 이미지를 베이스 이미지로 사용
-FROM python:3.8
+FROM python:3.10
 
 # 작업 디렉토리 설정
 WORKDIR /app
@@ -16,5 +18,5 @@ ENV APP_SECRET=fluentd_url
 ENV HTS_ID=INFO
 ENV SERVER_HOST=host
 
-# 애플리케이션 실행
-CMD ["python", "./stock.py"]
+# Prefect 에이전트 실행
+CMD ["prefect", "agent", "start", "--work-queue", "docker-agent"]

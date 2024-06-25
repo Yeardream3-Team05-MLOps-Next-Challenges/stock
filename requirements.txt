@@ -1,7 +1,7 @@
+httpx
 websockets==12.0
 pycryptodome==3.20.0
 kafka-python==2.0.2
 requests
-prefect==2.17.1
+prefect==2.18.3
 python-dotenv
-prefect-docker
